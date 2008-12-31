@@ -42,7 +42,8 @@ class GalleryItem < ActiveRecord::Base
   end
   
   before_thumbnail_saved do |thumbnail|
-    thumbnail.gallery_id = thumbnail.parent.gallery_id
+    item = thumbnail.parent
+    thumbnail.gallery_id = item.gallery_id
   end                                                
   
   def thumb(options = {})
