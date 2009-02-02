@@ -58,11 +58,10 @@ module GalleryTags
     options[:offset] = tag.attr['offset'] ? tag.attr['offset'].to_i  : 0
     order = (%w[ASC DESC].include?(tag.attr['order'].to_s.upcase)) ? tag.attr['order'] : "ASC"
     options[:order] = "#{by} #{order}"  
-    galleries = Gallery.find(:all, options).uniq unless @current_keywords.nil? && tag.attr['current_keywords'] == 'is'
-    if !@current_keywords.nil? && tag.attr['current_keywords'] == 'is_not' && galleries.length > 0                                                   
-      options.merge!(:conditions => ['galleries.id NOT IN (?) AND hidden =? AND external =?', galleries, false, false])   
-      galleries = Gallery.find(:all, options).uniq
+    if tag.attr['keywords']
+      options[:condtions].merge({:keywords => tag.attr['keywords'].split(',')})
     end
+    galleries = Gallery.find(:all, options)
     galleries.each do |gallery|
       tag.locals.gallery = gallery
       content << tag.expand
@@ -312,10 +311,8 @@ module GalleryTags
   
   def find_gallery(tag)  
     if tag.locals.gallery
-      tag.locals.gallery 
-    elsif tag.attr["name"]
-      Gallery.find_by_name tag.attr["name"]
-    elsif tag.attr["id"] 
+      tag.locals.gallery
+    elsif tag.attr["id"]
       Gallery.find_by_id tag.attr["id"] 
     elsif @current_gallery
       @current_gallery

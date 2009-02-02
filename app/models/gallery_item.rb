@@ -17,7 +17,7 @@ class GalleryItem < ActiveRecord::Base
   has_attachment :storage => Radiant::Config["gallery.storage"] ? Radiant::Config["gallery.storage"].to_sym : :file_system,
     :path_prefix => Radiant::Config["gallery.path_prefix"],
     :processor => Radiant::Config["gallery.processor"],
-    :max_size => Radiant::Config["gallery.max_size"].to_i.kilobytes     
+    :max_size => Radiant::Config["gallery.max_size"].to_i.kilobytes
   
   belongs_to :gallery
   
@@ -28,8 +28,8 @@ class GalleryItem < ActiveRecord::Base
   
   has_many :infos, :class_name => "GalleryItemInfo", :dependent => :delete_all
   
-  has_and_belongs_to_many :gallery_keywords, :join_table => "gallery_items_keywords", :foreign_key => "gallery_item_id", :uniq => true,
-    :class_name => "GalleryKeyword", :association_foreign_key => "keyword_id"
+  has_and_belongs_to_many :keywords, :join_table => "gallery_items_keywords", :foreign_key => "keyword_id", :uniq => true,
+                            :class_name => "GalleryKeyword", :association_foreign_key => "gallery_item_id"
 
   before_create :set_filename_as_name
   before_create :set_position
@@ -41,8 +41,7 @@ class GalleryItem < ActiveRecord::Base
     item.generate_default_thumbnails if item.parent.nil?
   end
   
-  before_thumbnail_saved do |thumbnail|
-    item = thumbnail.parent
+  before_thumbnail_saved do |item, thumbnail|
     thumbnail.gallery_id = item.gallery_id
   end                                                
   

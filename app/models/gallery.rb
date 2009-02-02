@@ -18,9 +18,9 @@ class Gallery < ActiveRecord::Base
     
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by'
   belongs_to :update_by, :class_name => 'User', :foreign_key => 'update_by'
-  has_and_belongs_to_many :gallery_keywords, :join_table => "galleries_keywords", :foreign_key => "gallery_id", :uniq => true,
-                            :class_name => "GalleryKeyword", :association_foreign_key => "keyword_id"
-                               
+  has_and_belongs_to_many :keywords, :join_table => "galleries_keywords", :foreign_key => "keyword_id", :uniq => true,
+                            :class_name => "GalleryKeyword", :association_foreign_key => "gallery_id"
+
   attr_protected :slug, :path    
   
   validates_presence_of :name
