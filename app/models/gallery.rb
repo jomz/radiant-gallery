@@ -60,7 +60,8 @@ class Gallery < ActiveRecord::Base
     str.slice(0..-2)
   end               
   
-  def keywords=(keywords)
+  def keywords=(keywords) 
+    self.gallery_keywords = []
     keys = keywords.split(',')
     keys.each do |word|
       self.gallery_keywords << GalleryKeyword.find_or_initialize_by_keyword(word)
