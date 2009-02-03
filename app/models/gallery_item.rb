@@ -28,7 +28,7 @@ class GalleryItem < ActiveRecord::Base
   
   has_many :infos, :class_name => "GalleryItemInfo", :dependent => :delete_all
   
-  has_and_belongs_to_many :keywords, :join_table => "gallery_items_keywords", :foreign_key => "keyword_id", :uniq => true,
+  has_and_belongs_to_many :gallery_keywords, :join_table => "gallery_items_keywords", :foreign_key => "keyword_id", :uniq => true,
                             :class_name => "GalleryKeyword", :association_foreign_key => "gallery_item_id"
 
   before_create :set_filename_as_name
@@ -71,25 +71,19 @@ class GalleryItem < ActiveRecord::Base
     end
   end
   
-  def keywords                         
-    str = ''                 
-    if self.gallery_keywords.length > 0 
-      self.gallery_keywords.uniq.each do |key|
-        str += key.keyword
-        str += ','
-      end                         
-      str = str.slice(0..-2)                        
-    else                
-      str += self.gallery.keywords          
-    end                           
+  def keywords
+    str =''
+    self.gallery_keywords.each do |key|
+      str += key.keyword
+      str += ','
+    end       
     return str
   end           
   
-  def keywords=(keywords) 
-    self.gallery_keywords = []
+  def keywords=(keywords)
     keys = keywords.split(',')
     keys.each do |word|
-      self.gallery_keywords << GalleryKeyword.find_or_create_by_keyword(word.strip)
+      self.gallery_keywords << GalleryKeyword.find_or_initialize_by_keyword(word)
     end
   end
   
