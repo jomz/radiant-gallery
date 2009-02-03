@@ -48,8 +48,10 @@ module GalleryItemTags
       options[:conditions].merge!({"gallery_keywords.keyword" => keywords}) if keywords.length > 0              
     end
     
-    if tag.attr['keywords']
-      options[:condtions].merge({:keywords => tag.attr['keywords'].split(',')})
+    if tag.attr['keywords']                    
+      keywords = tag.attr['keywords'].split(',');      
+      options[:joins] = :gallery_keywords
+      options[:conditions].merge!({"gallery_keywords.keyword" => keywords })
     end
     
     @page_number = tag.globals.page.request.params["page"] && tag.globals.page.request.params["page"].first.to_i > 1 ? tag.globals.page.request.params["page"].first.to_i : 1

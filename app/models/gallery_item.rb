@@ -76,8 +76,8 @@ class GalleryItem < ActiveRecord::Base
     self.gallery_keywords.each do |key|
       str += key.keyword
       str += ','
-    end       
-    return str
+    end   
+    str.slice(0..-2) 
   end           
   
   def keywords=(keywords)

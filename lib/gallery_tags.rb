@@ -35,8 +35,14 @@ module GalleryTags
       options[:conditions][:parent_id] = nil
     when 'bottom'
       options[:conditions][:children_count] = 0
-    end  
-
+    end
+                                        
+    if tag.attr['keywords']
+      keywords = tag.attr['keywords'].split(',');     
+      options[:joins] = :gallery_keywords  
+      options[:conditions].merge!({"gallery_keywords.keyword" => keywords })
+    end
+    
     by = tag.attr['by'] ? tag.attr['by'] : "position"
     unless Gallery.columns.find{|c| c.name == by }
       raise GalleryTagError.new("`by' attribute of `each' tag must be set to a valid field name")
@@ -58,9 +64,6 @@ module GalleryTags
     options[:offset] = tag.attr['offset'] ? tag.attr['offset'].to_i  : 0
     order = (%w[ASC DESC].include?(tag.attr['order'].to_s.upcase)) ? tag.attr['order'] : "ASC"
     options[:order] = "#{by} #{order}"  
-    if tag.attr['keywords']
-      options[:condtions].merge({:keywords => tag.attr['keywords'].split(',')})
-    end
     galleries = Gallery.find(:all, options)
     galleries.each do |gallery|
       tag.locals.gallery = gallery
