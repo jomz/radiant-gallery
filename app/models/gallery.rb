@@ -64,7 +64,7 @@ class Gallery < ActiveRecord::Base
     self.gallery_keywords = []
     keys = keywords.split(',')
     keys.each do |word|
-      self.gallery_keywords << GalleryKeyword.find_or_initialize_by_keyword(word)
+      self.gallery_keywords << GalleryKeyword.find_or_create_by_keyword(word.strip)
     end
   end
   

@@ -164,6 +164,15 @@ module GalleryTags
     %{<a href="#{gallery_url[0..-2]}?keywords=#{keyword.gsub(/[\s~\.:;+=]+/, '_')}"#{attributes}>#{keyword}</a>}
   end
   
+  desc %{
+    Usage:
+    <pre><code><r:gallery:keywords /></code></pre>
+    Provides keywords for current gallery }
+  tag "gallery:keywords" do |tag|      
+    gallery = tag.locals.gallery
+    gallery.keywords.split(',').join(" ")
+  end
+  
   tag 'gallery:breadcrumbs' do |tag|
     gallery = find_gallery(tag)
     breadcrumbs = []

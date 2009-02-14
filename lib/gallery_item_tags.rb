@@ -109,7 +109,11 @@ module GalleryItemTags
     Provides name for current gallery item, safe is to make safe for web }
   tag "gallery:item:name" do |tag|      
     item = find_item(tag)
+<<<<<<< HEAD:lib/gallery_item_tags.rb
     name = tag.attr['safe'] ? item.name.downcase.gsub(/[\s~\.:;+=]+/, '_') : item.name
+=======
+    item.name
+>>>>>>> added a keyword tag and fixed a bug where keywords are saved with leading and trailing whitespace:lib/gallery_item_tags.rb
   end 
   
   desc %{
