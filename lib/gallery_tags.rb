@@ -166,11 +166,16 @@ module GalleryTags
   
   desc %{
     Usage:
-    <pre><code><r:gallery:keywords /></code></pre>
-    Provides keywords for current gallery }
-  tag "gallery:keywords" do |tag|      
+    <pre><code><r:gallery:keywords [children='true|false']/></code></pre>
+    Provides keywords for current gallery and set search for children=true }
+  tag "gallery:keywords" do |tag|
+    children = tag.attr['children'] ? tag.attr['children'] : 'false'
     gallery = tag.locals.gallery
-    gallery.keywords.split(',').join(" ")
+    if children == 'false'
+      gallery.keywords.split(',').join(" ");
+    elsif children == 'true'
+      gallery.children_keywords.join(" ");
+    end
   end
   
   tag 'gallery:breadcrumbs' do |tag|

@@ -52,11 +52,11 @@ class Gallery < ActiveRecord::Base
   end
   
   def keywords
-    str =''
+    str =''     
     self.gallery_keywords.each do |key|
       str += key.keyword
       str += ','
-    end   
+    end                                   
     str.slice(0..-2)
   end               
   
@@ -66,6 +66,18 @@ class Gallery < ActiveRecord::Base
     keys.each do |word|
       self.gallery_keywords << GalleryKeyword.find_or_create_by_keyword(word.strip)
     end
+  end
+  
+  def children_keywords
+    keywords = self.gallery_keywords
+    self.children.each do |g|
+      keywords.concat(g.gallery_keywords)
+    end           
+    keys = []
+    keywords.uniq!.each do |key|
+      keys << key.keyword
+    end          
+    return keys
   end
   
   def url(root_id = nil)
