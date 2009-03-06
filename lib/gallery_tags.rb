@@ -166,16 +166,35 @@ module GalleryTags
   
   desc %{
     Usage:
-    <pre><code><r:gallery:keywords [children='true|false']/></code></pre>
-    Provides keywords for current gallery and set search for children=true }
+    <pre><code><r:gallery:keywords /></code></pre>
+    Provides keywords for current and children galleries }
   tag "gallery:keywords" do |tag|
-    children = tag.attr['children'] ? tag.attr['children'] : 'false'
     gallery = tag.locals.gallery
-    if children == 'false'
-      gallery.keywords.split(',').join(" ");
-    elsif children == 'true'
-      gallery.children_keywords.join(" ");
+    gallery.keywords.split(',').join(" ");
+    tag.expand
+  end                            
+
+  desc %{
+    Usage:
+    <pre><code><r:gallery:keywords:each /></code></pre>
+    Loops over each keywords for current and children galleries }
+  tag "gallery:keywords:each" do |tag|
+    content =''
+    gallery = tag.locals.gallery
+    gallery.gallery_keywords.uniq.each do |key|
+      tag.locals.uniq_keywords = key
+      content << tag.expand
     end
+    content
+  end 
+  
+  desc %{
+    Usage:
+    <pre><code><r:gallery:keyword/></code></pre>
+    Get the keyword of the current gallery:keywords loop } 
+  tag 'gallery:keyword' do |tag|
+    gallery_keyword = tag.locals.uniq_keywords
+    gallery_keyword.keyword
   end
   
   tag 'gallery:breadcrumbs' do |tag|

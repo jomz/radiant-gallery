@@ -68,18 +68,6 @@ class Gallery < ActiveRecord::Base
     end
   end
   
-  def children_keywords
-    keywords = self.gallery_keywords
-    self.children.each do |g|
-      keywords.concat(g.gallery_keywords)
-    end           
-    keys = []
-    keywords.uniq!.each do |key|
-      keys << key.keyword
-    end          
-    return keys
-  end
-  
   def url(root_id = nil)
     File.join((self.ancestors_from(root_id).reverse << self).collect{|a| a.slug})
   end
