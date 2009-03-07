@@ -190,9 +190,9 @@ module GalleryTags
   
   desc %{
     Usage:
-    <pre><code><r:gallery:keyword/></code></pre>
+    <pre><code><r:gallery:keywords:keyword/></code></pre>
     Get the keyword of the current gallery:keywords loop } 
-  tag 'gallery:keyword' do |tag|
+  tag 'gallery:keywords:keyword' do |tag|
     gallery_keyword = tag.locals.uniq_keywords
     gallery_keyword.keyword
   end

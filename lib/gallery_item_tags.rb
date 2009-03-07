@@ -11,10 +11,9 @@ module GalleryItemTags
   
   desc %{    
     Usage:
-    <pre><code><r:gallery:items:each [order='order' by='by' limit='limit' offset='offset' scope='all|gallery'
-    keywords='key1,key2,key3' current_keywords='is|is_not']></r:gallery:items:each></code></pre>
-    Valid scopes are 'all' (find all Gallery Items) and 'gallery' (find Items that belong to the current Gallery)
-    Iterates through gallery items keywords=(manual entered keywords) and/or current_keywords=(is|is_not) } 
+    <pre><code><r:gallery:items:each [order='order' by='by' limit='limit' offset='offset' scope='all|gallery']></r:gallery:items:each></code></pre>
+    Iterates over all items in current gallery.
+    Valid scopes are 'all' (find all Gallery Items) and 'gallery' (find Items that belong to the current Gallery) }
   tag "gallery:items:each" do |tag|
     content = ""
     gallery = find_gallery(tag)
@@ -109,11 +108,7 @@ module GalleryItemTags
     Provides name for current gallery item, safe is to make safe for web }
   tag "gallery:item:name" do |tag|      
     item = find_item(tag)
-<<<<<<< HEAD:lib/gallery_item_tags.rb
-    name = tag.attr['safe'] ? item.name.downcase.gsub(/[\s~\.:;+=]+/, '_') : item.name
-=======
     item.name
->>>>>>> added a keyword tag and fixed a bug where keywords are saved with leading and trailing whitespace:lib/gallery_item_tags.rb
   end 
   
   desc %{
