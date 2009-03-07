@@ -164,13 +164,19 @@ module GalleryTags
     %{<a href="#{gallery_url[0..-2]}?keywords=#{keyword.gsub(/[\s~\.:;+=]+/, '_')}"#{attributes}>#{keyword}</a>}
   end
   
-  desc %{
+  desc %{                 
     Usage:
-    <pre><code><r:gallery:keywords /></code></pre>
-    Provides keywords for current and children galleries }
+    <pre><code><r:gallery:keywords [separator=',']/></code></pre>
+    Provides keywords for current and children galleries, use
+    separator="separator_string" to specify the character between keywords }
   tag "gallery:keywords" do |tag|
-    gallery = tag.locals.gallery
-    gallery.keywords.split(',').join(" ");
+    gallery = tag.locals.gallery    
+    if tag.attr['join']
+      joiner = tag.attr['join'] 
+    else
+      joiner=' '
+    end
+    gallery.keywords.split(',').join(joiner);
     tag.expand
   end                            
 

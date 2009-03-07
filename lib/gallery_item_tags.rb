@@ -11,7 +11,7 @@ module GalleryItemTags
   
   desc %{    
     Usage:
-    <pre><code><r:gallery:items:each [order='order' by='by' limit='limit' offset='offset' scope='all|gallery']></r:gallery:items:each></code></pre>
+    <pre><code><r:gallery:items:each [order='order' by='by' limit='limit' offset='offset' scope='all|gallery' keywwords='key1,key2,key3']></r:gallery:items:each></code></pre>
     Iterates over all items in current gallery.
     Valid scopes are 'all' (find all Gallery Items) and 'gallery' (find Items that belong to the current Gallery) }
   tag "gallery:items:each" do |tag|
@@ -113,14 +113,17 @@ module GalleryItemTags
   
   desc %{
     Usage:
-    <pre><code><r:gallery:item:keywords [separator=',' safe='true']/></code></pre>
+    <pre><code><r:gallery:item:keywords [separator=',']/></code></pre>
     Provides keywords for current gallery item, use 
     separator="separator_string" to specify the character between keywords}
   tag "gallery:item:keywords" do |tag|      
     item = find_item(tag)    
-    joiner = tag.attr['separator'] ? tag.attr['separator'] : ' '  
-    keys = tag.attr['safe'] ? item.keywords.downcase.gsub(/[\s~\.:;+=]+/, '_') : item.keywords
-    keys.gsub(/\,/, joiner);
+    if tag.attr['join']
+      joiner = tag.attr['join'] 
+    else
+      joiner=' '
+    end
+    item.keywords.split(',').join(joiner)
   end 
   
   desc %{
