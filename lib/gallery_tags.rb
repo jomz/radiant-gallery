@@ -171,8 +171,8 @@ module GalleryTags
     separator="separator_string" to specify the character between keywords }
   tag "gallery:keywords" do |tag|
     gallery = tag.locals.gallery    
-    if tag.attr['join']
-      joiner = tag.attr['join'] 
+    if tag.attr['separator']
+      joiner = tag.attr['separator'] 
     else
       joiner=' '
     end
