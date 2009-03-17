@@ -88,11 +88,19 @@ module GalleryPageExtensions
     if url =~ /^#{self.url}(.*)/
       path, item, action = $1, nil, nil
       if path =~ /^(.*)\/(\d+\.\w+)\/(show|download)\/?$/
-        path, item, action = $1, $2, $3
-      end                                
-      @current_gallery = find_gallery_by_path(path)      
+        path, item, action = $1, $2, $3           
+      elsif path =~ /^(.*)\/(keywords)\/([\w\&]+)\/?/
+        path, action, item = $1, $2, $3  
+      end
+      if !item.nil? && !action.nil? && action == 'keywords'                  
+        keys = item.split('&')
+        if @current_keyword = Gallery.find(:all, :joins => :gallery_keywords, :conditions => {'gallery_keywords.keyword' => keys})
+          self
+        end
+      end
+      @current_gallery = find_gallery_by_path(path)                                          
       if @current_gallery
-        if !item.nil? && !action.nil?
+        if !item.nil? && !action.nil? && action != 'keywords'
           item_id, item_extension = item.split(".")
           if @current_item = @current_gallery.items.find_by_id_and_extension(item_id, item_extension)
             self
@@ -104,7 +112,7 @@ module GalleryPageExtensions
         end        
       else
         super
-      end  
+      end           
     else
       super
     end      

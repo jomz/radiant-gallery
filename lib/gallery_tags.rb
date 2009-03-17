@@ -95,15 +95,15 @@ module GalleryTags
   end
 
   tag 'gallery:if_current_keywords' do |tag|    
-    tag.expand if @current_keywords
+    tag.expand if @current_keyword
   end  
   
   tag 'gallery:unless_current_keywords' do |tag|    
-    tag.expand unless @current_keywords
+    tag.expand unless @current_keyword
   end
   
   tag 'gallery:current_keywords' do |tag|    
-    @current_keywords
+    @current_keyword
   end
   
   desc %{    
@@ -227,7 +227,7 @@ module GalleryTags
     attributes = " #{attributes}" unless attributes.empty?
     text = tag.double? ? tag.expand : tag.render('name')  
     gallery_url = File.join(tag.render('url'))
-    %{<a href="#{gallery_url}keywords?#{keyword}"#{attributes}>#{keyword}</a>}
+    %{<a href="#{gallery_url}keywords/#{keyword}/"#{attributes}>#{keyword}</a>}
   end
   
   tag 'gallery:breadcrumbs' do |tag|
