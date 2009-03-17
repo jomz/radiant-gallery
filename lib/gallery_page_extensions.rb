@@ -79,6 +79,10 @@ module GalleryPageExtensions
     @current_gallery
   end
   
+  def current_keyword
+    @current_keyword
+  end
+  
   def find_by_url(url, live = true, clean = false)
     url = clean_url(url)
     if url =~ /^#{self.url}(.*)/
@@ -100,7 +104,7 @@ module GalleryPageExtensions
         end        
       else
         super
-      end
+      end  
     else
       super
     end      

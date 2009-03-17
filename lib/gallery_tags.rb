@@ -93,6 +93,18 @@ module GalleryTags
     tag.locals.item = @current_gallery
     tag.expand
   end
+
+  tag 'gallery:if_current_keywords' do |tag|    
+    tag.expand if @current_keywords
+  end  
+  
+  tag 'gallery:unless_current_keywords' do |tag|    
+    tag.expand unless @current_keywords
+  end
+  
+  tag 'gallery:current_keywords' do |tag|    
+    @current_keywords
+  end
   
   desc %{    
     Usage:
@@ -176,7 +188,7 @@ module GalleryTags
     else
       joiner=' '
     end
-    gallery.keywords.split(',').join(joiner);
+    gallery.keywords.gsub!(/\,/, joiner);
     tag.expand
   end                            
 
@@ -200,7 +212,22 @@ module GalleryTags
     Get the keyword of the current gallery:keywords loop } 
   tag 'gallery:keywords:keyword' do |tag|
     gallery_keyword = tag.locals.uniq_keywords
-    gallery_keyword.keyword
+    gallery_keyword.keyword 
+  end
+       
+  desc %{
+    Usage:
+    <pre><code><r:gallery:keywords:link [*options]/></code></pre>
+    Get the keyword and creates a link for the current gallery:keywords loop 
+    options are rendered inline as key:value pairs i.e. class='' id='', etc.}    
+  tag 'gallery:keywords:link' do |tag|
+    keyword = tag.locals.uniq_keywords.keyword 
+    options = tag.attr.dup
+    attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
+    attributes = " #{attributes}" unless attributes.empty?
+    text = tag.double? ? tag.expand : tag.render('name')  
+    gallery_url = File.join(tag.render('url'))
+    %{<a href="#{gallery_url}keywords?#{keyword}"#{attributes}>#{keyword}</a>}
   end
   
   tag 'gallery:breadcrumbs' do |tag|
