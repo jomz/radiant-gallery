@@ -227,7 +227,7 @@ module GalleryTags
     attributes = " #{attributes}" unless attributes.empty?
     text = tag.double? ? tag.expand : tag.render('name')  
     gallery_url = File.join(tag.render('url'))
-    %{<a href="#{gallery_url}keywords/#{keyword}/"#{attributes}>#{keyword}</a>}
+    %{<a href="#{gallery_url[0..-2]}?keywords=#{keyword}"#{attributes}>#{keyword}</a>}
   end
   
   tag 'gallery:breadcrumbs' do |tag|
