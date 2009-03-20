@@ -121,11 +121,7 @@ module GalleryItemTags
     separator="separator_string" to specify the character between keywords}
   tag "gallery:item:keywords" do |tag|      
     item = find_item(tag)    
-    if tag.attr['separator']
-      joiner = tag.attr['separator'] 
-    else
-      joiner=' '
-    end
+    joiner = tag.attr['separator'] ? tag.attr['separator'] : ' '
     item.keywords.gsub!(/\,/, joiner);
   end 
   

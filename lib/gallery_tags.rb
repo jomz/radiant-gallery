@@ -183,11 +183,7 @@ module GalleryTags
     separator="separator_string" to specify the character between keywords }
   tag "gallery:keywords" do |tag|
     gallery = tag.locals.gallery    
-    if tag.attr['separator']
-      joiner = tag.attr['separator'] 
-    else
-      joiner=' '
-    end
+    joiner = tag.attr['separator'] ? tag.attr['separator'] : ' '
     gallery.keywords.gsub!(/\,/, joiner);
     tag.expand
   end                            
@@ -227,7 +223,7 @@ module GalleryTags
     attributes = " #{attributes}" unless attributes.empty?
     text = tag.double? ? tag.expand : tag.render('name')  
     gallery_url = File.join(tag.render('url'))
-    %{<a href="#{gallery_url[0..-2]}?keywords=#{keyword}"#{attributes}>#{keyword}</a>}
+    %{<a href="#{gallery_url[0..-2]}?keywords=#{keyword.gsub(/[\s]+/, '_')}"#{attributes}>#{keyword}</a>}
   end
   
   tag 'gallery:breadcrumbs' do |tag|
