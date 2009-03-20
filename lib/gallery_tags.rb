@@ -184,7 +184,7 @@ module GalleryTags
   tag "gallery:keywords" do |tag|
     gallery = tag.locals.gallery    
     joiner = tag.attr['separator'] ? tag.attr['separator'] : ' '
-    gallery.keywords.gsub!(/\,/, joiner);
+    gallery.keywords.gsub(/\,/, joiner);
     tag.expand
   end                            
 
@@ -217,7 +217,7 @@ module GalleryTags
     Get the keyword and creates a link for the current gallery:keywords loop 
     options are rendered inline as key:value pairs i.e. class='' id='', etc.}    
   tag 'gallery:keywords:link' do |tag|
-    keyword = tag.locals.uniq_keywords.keyword 
+    keyword = tag.locals.uniq_keywords ? tag.locals.uniq_keywords.keyword : tag.locals.gallery.keywords
     options = tag.attr.dup
     attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
     attributes = " #{attributes}" unless attributes.empty?

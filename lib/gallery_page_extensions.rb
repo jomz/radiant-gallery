@@ -72,7 +72,7 @@ module GalleryPageExtensions
   }
   tag "gallery:current_keywords" do |tag|          
     joiner = tag.attr['separator'] ? tag.attr['separator'] : ','
-    tag.globals.page.request.parameters['keywords'].gsub(/\,/, joiner)
+    @current_keywords = tag.globals.page.request.parameters['keywords'].gsub(/\,/, joiner)
   end
   
   def current_gallery
