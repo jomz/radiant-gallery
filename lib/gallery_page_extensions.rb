@@ -72,7 +72,7 @@ module GalleryPageExtensions
   }
   tag "gallery:current_keywords" do |tag|          
     joiner = tag.attr['separator'] ? tag.attr['separator'] : ','
-    @current_keywords = tag.globals.page.request.parameters['keywords'].gsub(/\,/, joiner)
+    tag.globals.page.request.parameters['keywords'].gsub(/\,/, joiner)
   end
   
   def current_gallery
@@ -85,7 +85,7 @@ module GalleryPageExtensions
       path, item, action = $1, nil, nil
       if path =~ /^(.*)\/(\d+\.\w+)\/(show|download)\/?$/
         path, item, action = $1, $2, $3
-      end            
+      end                                
       @current_gallery = find_gallery_by_path(path)      
       if @current_gallery
         if !item.nil? && !action.nil?

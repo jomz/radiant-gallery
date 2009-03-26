@@ -11,8 +11,8 @@ module GalleryItemTags
   
   desc %{    
     Usage:
-    <pre><code><r:gallery:items:each [order='order' by='by' limit='limit' offset='offset' scope='all|gallery' keywwords='key1,key2,key3']></r:gallery:items:each></code></pre>
-    Iterates over all items in current gallery.
+    <pre><code><r:gallery:items:each [order='order' by='by' limit='limit' offset='offset' scope='all|gallery'
+    keywords='key1,key2,key3' current_keywords='is|is_not']></r:gallery:items:each></code></pre>
     Valid scopes are 'all' (find all Gallery Items) and 'gallery' (find Items that belong to the current Gallery) }
   tag "gallery:items:each" do |tag|
     content = ""
@@ -47,10 +47,16 @@ module GalleryItemTags
       options[:conditions].merge!({"gallery_keywords.keyword" => keywords}) if keywords.length > 0              
     end
     
-    if tag.attr['keywords']                    
-      keywords = tag.attr['keywords'].split(',');      
+    if !tag.attr['keywords'].nil? || !tag.attr['current_keywords'].nil?                                                                                                                                  
+      keywords = !tag.attr['keywords'].nil? ? tag.attr['keywords'].split(',') : []
+      if (tag.attr['current_keywords'] == 'is' || tag.attr['current_keywords'] == 'is_not') && !tag.globals.page.request.parameters['keywords'].nil?
+        @current_keywords = tag.globals.page.request.parameters['keywords'].split(',') if !tag.globals.page.request.parameters['keywords'].nil?
+        if !@current_keywords.nil? && @current_keywords.length > 0
+          keywords.concat(@current_keywords)
+        end
+      end
       options[:joins] = :gallery_keywords
-      options[:conditions].merge!({"gallery_keywords.keyword" => keywords })
+      options[:conditions].merge!({"gallery_keywords.keyword" => keywords}) if keywords.length > 0              
     end
     
     @page_number = tag.globals.page.request.params["page"] && tag.globals.page.request.params["page"].first.to_i > 1 ? tag.globals.page.request.params["page"].first.to_i : 1
