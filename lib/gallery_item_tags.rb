@@ -13,7 +13,8 @@ module GalleryItemTags
     Usage:
     <pre><code><r:gallery:items:each [order='order' by='by' limit='limit' offset='offset' scope='all|gallery'
     keywords='key1,key2,key3' current_keywords='is|is_not']></r:gallery:items:each></code></pre>
-    Valid scopes are 'all' (find all Gallery Items) and 'gallery' (find Items that belong to the current Gallery) }
+    Valid scopes are 'all' (find all Gallery Items) and 'gallery' (find Items that belong to the current Gallery)
+    Iterates through gallery items keywords=(manual entered keywords) and/or current_keywords=(is|is_not) } 
   tag "gallery:items:each" do |tag|
     content = ""
     gallery = find_gallery(tag)
