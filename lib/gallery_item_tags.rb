@@ -123,13 +123,15 @@ module GalleryItemTags
   
   desc %{
     Usage:
-    <pre><code><r:gallery:item:keywords [separator=',']/></code></pre>
+    <pre><code><r:gallery:item:keywords [separator=',' safe='true']/></code></pre>
     Provides keywords for current gallery item, use 
     separator="separator_string" to specify the character between keywords}
   tag "gallery:item:keywords" do |tag|      
     item = find_item(tag)    
-    joiner = tag.attr['separator'] ? tag.attr['separator'] : ' '
-    item.keywords.gsub(/\,/, joiner);
+    joiner = tag.attr['separator'] ? tag.attr['separator'] : ' '  
+    keys = item.keywords
+    keys = keys.gsub(/[\s]+/, '_') if (tag.attr['safe'])
+    keys.gsub(/\,/, joiner);
   end 
   
   desc %{

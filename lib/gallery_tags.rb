@@ -176,13 +176,15 @@ module GalleryTags
   
   desc %{                 
     Usage:
-    <pre><code><r:gallery:keywords [separator=',']/></code></pre>
+    <pre><code><r:gallery:keywords [separator=',' safe='true']/></code></pre>
     Provides keywords for current and children galleries, use
     separator="separator_string" to specify the character between keywords }
   tag "gallery:keywords" do |tag|
     gallery = tag.locals.gallery    
-    joiner = tag.attr['separator'] ? tag.attr['separator'] : ' '
-    gallery.keywords.gsub(/\,/, joiner);
+    joiner = tag.attr['separator'] ? tag.attr['separator'] : ' ' 
+    keys = gallery.keywords
+    keys = keys.gsub(/[\s]+/, '_') if (tag.attr['safe'])
+    keys.gsub(/\,/, joiner);
     tag.expand
   end                            
 
@@ -202,11 +204,13 @@ module GalleryTags
   
   desc %{
     Usage:
-    <pre><code><r:gallery:keywords:keyword/></code></pre>
+    <pre><code><r:gallery:keywords:keyword [safe='true']/></code></pre>
     Get the keyword of the current gallery:keywords loop } 
   tag 'gallery:keywords:keyword' do |tag|
     gallery_keyword = tag.locals.uniq_keywords
-    gallery_keyword.keyword 
+    keys = gallery_keyword.keyword
+    keys = keys.gsub(/[\s]+/, '_') if (tag.attr['safe'])
+    keys
   end
        
   desc %{
