@@ -183,7 +183,7 @@ module GalleryTags
     gallery = tag.locals.gallery    
     joiner = tag.attr['separator'] ? tag.attr['separator'] : ' ' 
     keys = gallery.keywords
-    keys = keys.gsub(/[\s]+/, '_') if (tag.attr['safe'])
+    keys = keys.gsub(/[\s]+/, '_').downcase if (tag.attr['safe'])
     keys.gsub(/\,/, joiner);
     tag.expand
   end                            
@@ -209,7 +209,7 @@ module GalleryTags
   tag 'gallery:keywords:keyword' do |tag|
     gallery_keyword = tag.locals.uniq_keywords
     keys = gallery_keyword.keyword
-    keys = keys.gsub(/[\s]+/, '_') if (tag.attr['safe'])
+    keys = keys.gsub(/[\s]+/, '_').downcase if (tag.attr['safe'])
     keys
   end
        
