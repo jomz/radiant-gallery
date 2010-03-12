@@ -29,7 +29,7 @@ module GalleryItemsHelper
   
   def item_destroy_button(item)
     link_to image_tag('extensions/gallery/admin/destroy.png'), admin_gallery_item_url(@gallery, item),
-      :class => 'action destroy', :title => 'Destroy'
+      :class => 'action destroy', :title => 'Destroy', :method => 'delete'
   end
   
   def item_edit_button(item)

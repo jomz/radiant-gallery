@@ -60,6 +60,18 @@ module GalleryItemTags
       options[:conditions].merge!({"gallery_keywords.keyword" => keywords}) if keywords.length > 0              
     end
     
+    if !tag.attr['keywords'].nil? || !tag.attr['current_keywords'].nil?                                                                                                                                  
+      keywords = !tag.attr['keywords'].nil? ? tag.attr['keywords'].split(',') : []
+      if (tag.attr['current_keywords'] == 'is' || tag.attr['current_keywords'] == 'is_not') && !tag.globals.page.request.parameters['keywords'].nil?
+        @current_keywords = tag.globals.page.request.parameters['keywords'].split(',') if !tag.globals.page.request.parameters['keywords'].nil?
+        if !@current_keywords.nil? && @current_keywords.length > 0
+          keywords.concat(@current_keywords)
+        end
+      end
+      options[:joins] = :gallery_keywords
+      options[:conditions].merge!({"gallery_keywords.keyword" => keywords}) if keywords.length > 0              
+    end
+    
     @page_number = tag.globals.page.request.params["page"] && tag.globals.page.request.params["page"].first.to_i > 1 ? tag.globals.page.request.params["page"].first.to_i : 1
     if !tag.attr['limit'].nil? && tag.attr['offset'].nil?
       options[:offset] = tag.attr['limit'].to_i * (@page_number - 1)      
